@@ -19,7 +19,7 @@
         <zookeeper.version>3.4.6</zookeeper.version>
         <zkclient.version>0.1</zkclient.version>
         <curator.version>2.5.0</curator.version>
-        <servlet.version>3.0.1</servlet.version>
+        <servlet.version>2.5</servlet.version>
         <jetbrick-template.version>2.0.10</jetbrick-template.version>
         <mybatis.version>3.2.7</mybatis.version>
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
@@ -222,7 +222,7 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <artifactId>servlet-api</artifactId>
             <version>${servlet.version}</version>
             <scope>provided</scope>
         </dependency>
