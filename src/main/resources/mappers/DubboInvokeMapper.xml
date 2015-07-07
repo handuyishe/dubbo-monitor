@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handu.open.dubbo.monitor.DubboMonitorService">
+
+    <sql id="allOfDubboInvoke">
+        id,
+        invoke_date as invokeDate,
+        service,
+        method,
+        consumer,
+        provider,
+        type,
+        invoke_time as invokeTime,
+        success,
+        failure,
+        elapsed,
+        concurrent,
+        max_elapsed as maxElapsed,
+        max_concurrent as maxConcurrent
+    </sql>
+    
+    <sql id="allNoAsOfDubboInvoke">
+        id,
+        invoke_date,
+        service,
+        method,
+        consumer,
+        provider,
+        type,
+        invoke_time,
+        success,
+        failure,
+        elapsed,
+        concurrent,
+        max_elapsed,
+        max_concurrent
+    </sql>
+
+    <!-- Add -->
+    <insert id="addDubboInvoke" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+        insert into
+        dubbo_invoke (
+        <include refid="allNoAsOfDubboInvoke" />
+        )
+        values(
+        #{id},
+        #{invokeDate},
+        #{service},
+        #{method},
+        #{consumer},
+        #{provider},
+        #{type},
+        #{invokeTime},
+        #{success},
+        #{failure},
+        #{elapsed},
+        #{concurrent},
+        #{maxElapsed},
+        #{maxConcurrent}
+        )
+    </insert>
+
+    <select id="countDubboInvoke" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+        SELECT
+        dubbo_invoke.method,
+        dubbo_invoke.type,
+        SUM(dubbo_invoke.success) as success,
+        SUM(dubbo_invoke.elapsed) / SUM(dubbo_invoke.success) as elapsed,
+        dubbo_invoke.invoke_time DIV #{timeParticle} * #{timeParticle} as invokeTime
+        FROM dubbo_invoke
+
+        WHERE 1 = 1
+
+        <if test="invokeDate != null">
+            AND dubbo_invoke.invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateFrom != null">
+            AND dubbo_invoke.invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateTo != null">
+            AND dubbo_invoke.invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
+        </if>
+        <if test="service != null and service!= '' ">
+            AND dubbo_invoke.service = #{service}
+        </if>
+        <if test="method != null and method!= '' ">
+            AND dubbo_invoke.method = #{method}
+        </if>
+        <if test="consumer != null and consumer!= '' ">
+            AND dubbo_invoke.consumer = #{consumer}
+        </if>
+        <if test="provider != null and provider!= '' ">
+            AND dubbo_invoke.provider = #{provider}
+        </if>
+        <if test="type != null and type!= '' ">
+            AND dubbo_invoke.type = #{type}
+        </if>
+        GROUP BY dubbo_invoke.invoke_time DIV #{timeParticle}
+    </select>
+
+    <select id="countDubboInvokeInfo" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+        SELECT
+            SUM(dubbo_invoke.success) as success,
+            SUM(dubbo_invoke.failure) as failure,
+            SUM(dubbo_invoke.elapsed) as elapsed,
+            MAX(dubbo_invoke.max_elapsed) as maxElapsed,
+            MIN(dubbo_invoke.max_concurrent) as maxConcurrent
+        FROM dubbo_invoke
+        WHERE
+            1 = 1
+        <if test="invokeDate != null">
+            AND dubbo_invoke.invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateFrom != null">
+            AND dubbo_invoke.invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateTo != null">
+            AND dubbo_invoke.invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
+        </if>
+        <if test="service != null and service!= '' ">
+            AND dubbo_invoke.service = #{service}
+        </if>
+        <if test="method != null and method!= '' ">
+            AND dubbo_invoke.method = #{method}
+        </if>
+        <if test="consumer != null and consumer!= '' ">
+            AND dubbo_invoke.consumer = #{consumer}
+        </if>
+        <if test="provider != null and provider!= '' ">
+            AND dubbo_invoke.provider = #{provider}
+        </if>
+        <if test="type != null and type!= '' ">
+            AND dubbo_invoke.type = #{type}
+        </if>
+    </select>
+
+    <select id="getMethodsByService" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="string">
+        SELECT
+         DISTINCT(method)
+        FROM dubbo_invoke
+        WHERE
+        1 = 1
+        <if test="invokeDate != null">
+            AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+        </if>
+        <if test="service != null and service!= '' ">
+            AND service = #{service}
+        </if>
+        <if test="method != null and method!= '' ">
+            AND method = #{method}
+        </if>
+        <if test="consumer != null and consumer!= '' ">
+            AND consumer = #{consumer}
+        </if>
+        <if test="provider != null and provider!= '' ">
+            AND provider = #{provider}
+        </if>
+        <if test="type != null and type!= '' ">
+            AND type = #{type}
+        </if>
+    </select>
+
+    <select id="countDubboInvokeSuccessTopTen" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+        SELECT
+        dubbo_invoke.service,
+        dubbo_invoke.method,
+        SUM(dubbo_invoke.success) as success
+        FROM dubbo_invoke
+        WHERE
+        1 = 1
+        <if test="invokeDate != null">
+            AND dubbo_invoke.invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateFrom != null">
+            AND dubbo_invoke.invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateTo != null">
+            AND dubbo_invoke.invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
+        </if>
+        <if test="service != null and service!= '' ">
+            AND dubbo_invoke.service = #{service}
+        </if>
+        <if test="method != null and method!= '' ">
+            AND dubbo_invoke.method = #{method}
+        </if>
+        <if test="consumer != null and consumer!= '' ">
+            AND dubbo_invoke.consumer = #{consumer}
+        </if>
+        <if test="provider != null and provider!= '' ">
+            AND dubbo_invoke.provider = #{provider}
+        </if>
+        <if test="type != null and type!= '' ">
+            AND dubbo_invoke.type = #{type}
+        </if>
+        GROUP BY dubbo_invoke.service, dubbo_invoke.method
+        ORDER BY SUM(dubbo_invoke.success)  DESC LIMIT 20
+    </select>
+
+    <select id="countDubboInvokeFailureTopTen" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+        SELECT
+        dubbo_invoke.service,
+        dubbo_invoke.method,
+        SUM(dubbo_invoke.failure) as failure
+        FROM dubbo_invoke
+        WHERE
+        1 = 1
+        <if test="invokeDate != null">
+            AND dubbo_invoke.invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateFrom != null">
+            AND dubbo_invoke.invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateTo != null">
+            AND dubbo_invoke.invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
+        </if>
+        <if test="service != null and service!= '' ">
+            AND dubbo_invoke.service = #{service}
+        </if>
+        <if test="method != null and method!= '' ">
+            AND dubbo_invoke.method = #{method}
+        </if>
+        <if test="consumer != null and consumer!= '' ">
+            AND dubbo_invoke.consumer = #{consumer}
+        </if>
+        <if test="provider != null and provider!= '' ">
+            AND dubbo_invoke.provider = #{provider}
+        </if>
+        <if test="type != null and type!= '' ">
+            AND dubbo_invoke.type = #{type}
+        </if>
+        GROUP BY dubbo_invoke.service, dubbo_invoke.method
+        ORDER BY SUM(dubbo_invoke.failure)  DESC LIMIT 20
+    </select>
+</mapper>

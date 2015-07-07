@@ -1,0 +1,67 @@
+#tag layout_block("mainContent")
+<section class="content-header">
+  <h1>
+    Application ${reverse ? "used by" : "depends on"}
+    <small>overview</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href=""><i class="fa fa-home"></i> Home</a></li>
+    <li><a href="applications"><i class="fa fa-cubes"></i> Applications</a></li>
+    <li>${application}</li>
+    <li class="active">
+      <a href="applications/providers?application=${application}">Providers</a> | <a href="applications/consumers?application=${application}">Consumers</a> |
+      #if (reverse)
+      <a href="applications/dependencies?application=${application}">Depends On</a> | Used By
+      #else
+      Depends On | <a href="applications/dependencies?application=${application}&reverse=true">Used By</a>
+      #end
+    </li>
+  </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Lists of application ${reverse ? "used by" : "depends on"}</h3>
+
+          <div class="box-tools">
+            <div class="input-group" style="width: 200px;">
+              <input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Application name"/>
+
+              <div class="input-group-btn">
+                <button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover table-striped">
+            <thead>
+            <tr>
+              <th>Application name</th>
+            </tr>
+            </thead>
+            <tbody>
+            #for (row : rows)
+            <tr>
+              <td>${row}</td>
+            </tr>
+            #end
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+
+</section>
+#end
+
+#include ("../common/main_layout.html")

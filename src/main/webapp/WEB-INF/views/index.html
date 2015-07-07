@@ -1,0 +1,71 @@
+#tag layout_block("headContent")
+<!-- daterange picker -->
+<link href="resources/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+<!-- daterangepicker -->
+<script src="resources/plugins/daterangepicker/moment.min.js" type="text/javascript"></script>
+<script src="resources/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<!-- Bootstrap time Picker -->
+<script src="resources/plugins/highcharts/highcharts.js" type="text/javascript"></script>
+<script src="resources/plugins/highcharts/exporting.js" type="text/javascript"></script>
+<script src="resources/plugins/highcharts/dark-unica.js" type="text/javascript"></script>
+<script src="resources/scripts/index.js" type="text/javascript"></script>
+#end
+
+#tag layout_block("mainContent")
+
+    <section class="content-header">
+        <h1>
+            Home
+            <small>overview</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href=""><i class="fa fa-home"></i> Home</a></li>
+        </ol>
+    </section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row margin-bottom">
+        <div class="col-xs-12">
+            <input type="text" hidden="hidden" id="invokeSearchService" name="invokeSearchService" value="${service}"/>
+            <input type="text" hidden="hidden" id="invokeDateFrom" name="invokeDateFrom"/>
+            <input type="text" hidden="hidden" id="invokeDateTo" name="invokeDateTo"/>
+            <button class="btn btn-default pull-right" id="searchDateRange">
+                <i class="fa fa-calendar"></i>
+                <span>Date range picker</span>
+                <i class="fa fa-caret-down"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Top Count <small>method of service</small></h3>
+                </div>
+
+                <div class="box box-solid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="TOP-SUCCESS" class="box-body"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-solid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="TOP-FAILURE" class="box-body"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+</section>
+#end
+
+#include ("common/main_layout.html")
