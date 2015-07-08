@@ -17,7 +17,9 @@ CREATE TABLE `dubbo_invoke` (
   `concurrent` int(11) DEFAULT NULL,
   `max_elapsed` int(11) DEFAULT NULL,
   `max_concurrent` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `index_service` (`service`) USING BTREE,
+  KEY `index_method` (`method`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 SET FOREIGN_KEY_CHECKS = 1;
