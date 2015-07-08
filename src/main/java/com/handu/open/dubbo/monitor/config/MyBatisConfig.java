@@ -16,7 +16,7 @@
 package com.handu.open.dubbo.monitor.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import org.apache.ibatis.plugin.Interceptor;
+import com.google.common.base.Preconditions;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.BeansException;
@@ -26,7 +26,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -40,21 +39,21 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class MyBatisConfig implements ApplicationContextAware {
 
     @Autowired
-    Environment env;
+    private Environment env;
 
     private ApplicationContext context;
 
-    private static final String DEFAULT_URL = "jdbc:mysql://172.16.1.85:3306/dubbo_monitor?prepStmtCacheSize=517&cachePrepStmts=true&autoReconnect=true&characterEncoding=utf-8";
-    private static final String DEFAULT_USERNAME = "root";
-    private static final String DEFAULT_PASSWORD = "root";
-    private static final String DEFAULT_MAX_ACTIVE = "500";
+    private static final String DB_URL = "db.url";
+    private static final String DB_USERNAME = "db.username";
+    private static final String DB_PASSWORD = "db.password";
+    private static final String DB_MAX_ACTIVE = "db.maxActive";
 
     @Bean
     public DruidDataSource dataSource() {
-        final String url = env.getProperty("db.url", DEFAULT_URL);
-        final String username = env.getProperty("db.username", DEFAULT_USERNAME);
-        final String password = env.getProperty("db.password", DEFAULT_PASSWORD);
-        final int maxActive = Integer.parseInt(env.getProperty("db.maxActive", DEFAULT_MAX_ACTIVE));
+        final String url = Preconditions.checkNotNull(env.getProperty(DB_URL));
+        final String username = Preconditions.checkNotNull(env.getProperty(DB_USERNAME));
+        final String password = env.getProperty(DB_PASSWORD);
+        final int maxActive = Integer.parseInt(env.getProperty(DB_MAX_ACTIVE, "200"));
 
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setUrl(url);
@@ -69,9 +68,7 @@ public class MyBatisConfig implements ApplicationContextAware {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource());
-        Resource[] resources = context.getResources("classpath*:mappers/**/*.xml");
-        factoryBean.setMapperLocations(resources);
-        factoryBean.setPlugins(new Interceptor[] { });
+        factoryBean.setMapperLocations(context.getResources("classpath*:mappers/**/*.xml"));
         return factoryBean.getObject();
     }
 

@@ -44,31 +44,4 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return jetTemplateViewResolver;
     }
 
-//    @Bean
-//    public ServletContextTemplateResolver templateResolver(){
-//        ServletContextTemplateResolver servletContextTemplateResolver = new ServletContextTemplateResolver();
-//        servletContextTemplateResolver.setPrefix("/WEB-INF/views/");
-//        servletContextTemplateResolver.setSuffix(".html");
-//        servletContextTemplateResolver.setTemplateMode("HTML5");
-//        servletContextTemplateResolver.setOrder(1);
-//        servletContextTemplateResolver.setCharacterEncoding("UTF-8");
-//        return servletContextTemplateResolver;
-//    }
-//
-//    @Bean
-//    public SpringTemplateEngine templateEngine(){
-//        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-//        templateEngine.setTemplateResolver(templateResolver());
-//        templateEngine.addDialect(new LayoutDialect());
-//        return templateEngine;
-//    }
-//
-//    @Bean
-//    public ThymeleafViewResolver viewResolver(){
-//        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
-//        viewResolver.setTemplateEngine(templateEngine());
-//        viewResolver.setCharacterEncoding("UTF-8");
-//        return viewResolver;
-//    }
-
 }

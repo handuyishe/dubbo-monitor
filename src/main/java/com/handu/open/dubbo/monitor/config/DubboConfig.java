@@ -32,10 +32,10 @@ import org.springframework.core.env.Environment;
 @Configuration
 public class DubboConfig {
 
-    public static final String REGISTRY_ADDRESS = "dubbo.registry.address";
-    public static final String APPLICATION_NAME = "dubbo.application.name";
-    public static final String APPLICATION_OWNER = "dubbo.application.owner";
-    public static final String PROTOCOL_PORT = "dubbo.protocol.port";
+    private static final String REGISTRY_ADDRESS = "dubbo.registry.address";
+    private static final String APPLICATION_NAME = "dubbo.application.name";
+    private static final String APPLICATION_OWNER = "dubbo.application.owner";
+    private static final String PROTOCOL_PORT = "dubbo.protocol.port";
 
     @Autowired
     private Environment env;
@@ -50,7 +50,7 @@ public class DubboConfig {
     @Bean
     public ApplicationConfig applicationConfig() {
         ApplicationConfig applicationConfig = new ApplicationConfig();
-        applicationConfig.setName(env.getProperty(APPLICATION_NAME));
+        applicationConfig.setName(env.getProperty(APPLICATION_NAME, "dubbo-monitor"));
         applicationConfig.setOwner(env.getProperty(APPLICATION_OWNER));
         return applicationConfig;
     }
