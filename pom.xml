@@ -21,10 +21,7 @@
         <curator.version>2.5.0</curator.version>
         <servlet.version>2.5</servlet.version>
         <jetbrick-template.version>2.0.10</jetbrick-template.version>
-        <mybatis.version>3.2.7</mybatis.version>
-        <mybatis-spring.version>1.2.2</mybatis-spring.version>
-        <mysql.version>5.1.30</mysql.version>
-        <druid.version>1.0.14</druid.version>
+        <spring.data.version>1.7.2.RELEASE</spring.data.version>
         <jackson.version>2.3.3</jackson.version>
         <junit.version>4.11</junit.version>
     </properties>
@@ -232,33 +229,11 @@
             <artifactId>jetbrick-template-springmvc</artifactId>
             <version>${jetbrick-template.version}</version>
         </dependency>
-        <!-- MyBatis -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>${mybatis.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>${mybatis-spring.version}</version>
-        </dependency>
-        <!-- MySQL JDBC Driver -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>${druid.version}</version>
-        </dependency>
         <!-- Spring Data Support -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${spring.data.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

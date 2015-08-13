@@ -24,9 +24,9 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.monitor.MonitorService;
 import com.google.common.collect.Maps;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
-import com.handu.open.dubbo.monitor.support.Dao;
 import com.handu.open.dubbo.monitor.support.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -65,7 +65,7 @@ public class DubboMonitorService implements MonitorService {
     private RegistryContainer registryContainer;
 
     @Autowired
-    private Dao dao;
+    private MongoTemplate mongoTemplate;
 
     @PostConstruct
     private void init() {
@@ -144,7 +144,7 @@ public class DubboMonitorService implements MonitorService {
                     && dubboInvoke.getConcurrent() == 0 && dubboInvoke.getMaxElapsed() == 0 && dubboInvoke.getMaxConcurrent() == 0) {
                 return;
             }
-            dao.insert(CLASSNAME, "addDubboInvoke", dubboInvoke);
+            mongoTemplate.insert(dubboInvoke);
 
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);
