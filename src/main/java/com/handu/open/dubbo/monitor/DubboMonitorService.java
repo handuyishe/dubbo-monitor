@@ -30,6 +30,9 @@ import com.handu.open.dubbo.monitor.support.QueryConstructor;
 import com.handu.open.dubbo.monitor.support.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.mapreduce.GroupBy;
 import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -213,8 +216,23 @@ public class DubboMonitorService implements MonitorService {
             logger.error("统计查询缺少必要参数！");
             throw new RuntimeException("统计查询缺少必要参数！");
         }
+        TypedAggregation<DubboInvoke> aggregation = Aggregation.newAggregation(DubboInvoke.class,
+                Aggregation.group("service", "method")
+                        .sum("success").as("success")
+                        .sum("failure").as("failure")
+                        .sum("elapsed").as("elapsed")
+                        .max("maxElapsed").as("maxElapsed")
+                        .min("maxConcurrent").as("maxConcurrent"),
+                Aggregation.match(Criteria.where("invokeDate").gte(dubboInvoke.getInvokeDateFrom()).lte(dubboInvoke.getInvokeDateTo())
+                        .and("service").is(dubboInvoke.getService())
+                        .and("method").is(dubboInvoke.getMethod())
+                        .and("type").is(dubboInvoke.getType())
+                )
+        );
+        AggregationResults<DubboInvoke> result = mongoTemplate.aggregate(aggregation, DubboInvoke.class);
+        
 //        return dao.getList(CLASSNAME, "countDubboInvokeInfo", dubboInvoke);
-        return null;
+        return result.getMappedResults();
     }
 
     /**
