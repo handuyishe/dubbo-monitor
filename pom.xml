@@ -8,8 +8,8 @@
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-    <name>Dubbo Monitor</name>
-    <description>Monitor module of dubbo project</description>
+    <name>Dubbo Monitor for RD</name>
+    <description>Monitor module of dubbo project for Relational Database</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

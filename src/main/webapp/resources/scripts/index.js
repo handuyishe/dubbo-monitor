@@ -32,8 +32,8 @@ $(function () {
 function loadChartsData() {
     $.ajax({
         type: "POST", url: "loadTopData", dataType: "json", data: {
-            "invokeDateFrom": new Date($('#invokeDateFrom').val()),
-            "invokeDateTo": new Date($('#invokeDateTo').val())
+            "invokeDateFrom": new Date($('#invokeDateFrom').val() + ' 00:00:00'),
+            "invokeDateTo": new Date($('#invokeDateTo').val() + ' 23:59:59')
         }, error: function (req, status, err) {
             alert('Failed reason: ' + err);
         }, success: function (data) {
