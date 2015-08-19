@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Statistics Controller
@@ -44,7 +45,7 @@ public class StatisticsController {
     @RequestMapping()
     public String index(@ModelAttribute DubboInvoke dubboInvoke, Model model) {
         //获取Service方法
-        List<String> methods = dubboMonitorService.getMethodsByService(dubboInvoke);
+        Set<String> methods = dubboMonitorService.getMethodsByService(dubboInvoke);
         List<DubboInvoke> dubboInvokes;
         List<DubboStatistics> dubboStatisticses = new ArrayList<DubboStatistics>();
         DubboStatistics dubboStatistics;

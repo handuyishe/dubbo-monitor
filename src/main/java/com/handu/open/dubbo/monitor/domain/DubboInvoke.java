@@ -15,6 +15,7 @@
  */
 package com.handu.open.dubbo.monitor.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -30,6 +31,7 @@ public class DubboInvoke implements Serializable {
 
     private String id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date invokeDate;
 
     private String service;
@@ -62,8 +64,10 @@ public class DubboInvoke implements Serializable {
      */
     private long timeParticle = 60000;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date invokeDateFrom;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date invokeDateTo;
 
     public Date getInvokeDate() {

@@ -1,12 +1,12 @@
 /**
  * Copyright 2006-2015 handu.com
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,18 +22,23 @@ import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.monitor.MonitorService;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
+import com.handu.open.dubbo.monitor.support.QueryConstructor;
 import com.handu.open.dubbo.monitor.support.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapreduce.GroupBy;
+import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -174,11 +179,26 @@ public class DubboMonitorService implements MonitorService {
             logger.error("统计查询缺少必要参数！");
             throw new RuntimeException("统计查询缺少必要参数！");
         }
-        return dao.getList(CLASSNAME, "countDubboInvoke", dubboInvoke);
+//        return dao.getList(CLASSNAME, "countDubboInvoke", dubboInvoke);
+        return null;
     }
 
-    public List<String> getMethodsByService(DubboInvoke dubboInvoke) {
-        return dao.getList(CLASSNAME, "getMethodsByService", dubboInvoke);
+    public Set<String> getMethodsByService(DubboInvoke dubboInvoke) {
+//        return dao.getList(CLASSNAME, "getMethodsByService", dubboInvoke);
+        Set<String> methods = Sets.newHashSet();
+        Query query = QueryConstructor.get()
+                .addIsAttribute("service", dubboInvoke.getService())
+                .addIsAttribute("invokeDate", dubboInvoke.getInvokeDate())
+                .addIsAttribute("provider", dubboInvoke.getProvider())
+                .addIsAttribute("consumer", dubboInvoke.getConsumer())
+                .addIsAttribute("type", dubboInvoke.getType())
+                .addBetweenAttribute("invokeDate", dubboInvoke.getInvokeDateFrom(), dubboInvoke.getInvokeDateTo())
+                .getQuery();
+        List<DubboInvoke> result = mongoTemplate.find(query, DubboInvoke.class, "dubboInvoke");
+        for (DubboInvoke di : result) {
+            methods.add(di.getMethod());
+        }
+        return methods;
     }
 
     /**
@@ -193,7 +213,8 @@ public class DubboMonitorService implements MonitorService {
             logger.error("统计查询缺少必要参数！");
             throw new RuntimeException("统计查询缺少必要参数！");
         }
-        return dao.getList(CLASSNAME, "countDubboInvokeInfo", dubboInvoke);
+//        return dao.getList(CLASSNAME, "countDubboInvokeInfo", dubboInvoke);
+        return null;
     }
 
     /**
@@ -202,10 +223,42 @@ public class DubboMonitorService implements MonitorService {
      * @param dubboInvoke
      * @return
      */
-    public Map<String,List> countDubboInvokeTopTen(DubboInvoke dubboInvoke){
+    public Map<String, List> countDubboInvokeTopTen(DubboInvoke dubboInvoke) {
         Map<String, List> result = Maps.newHashMap();
-        result.put("success", dao.getList(CLASSNAME, "countDubboInvokeSuccessTopTen", dubboInvoke));
-        result.put("failure", dao.getList(CLASSNAME, "countDubboInvokeFailureTopTen", dubboInvoke));
+
+        Criteria criteris = Criteria.where("invokeDate").gte(dubboInvoke.getInvokeDateFrom()).lte(dubboInvoke.getInvokeDateTo());
+
+        List<DubboInvoke> successList = Lists.newArrayList();
+        GroupByResults<DubboInvoke> successResults = mongoTemplate.group(criteris, "dubboInvoke",
+                GroupBy.key("service", "method").initialDocument("{ success: 0 }")
+                        .reduceFunction("function(doc, prev) { prev.success += doc.success }"),
+                DubboInvoke.class);
+        for (DubboInvoke dubboInvoke1 : successResults) {
+            successList.add(dubboInvoke1);
+        }
+        Collections.sort(successList, new Comparator<DubboInvoke>() {
+            public int compare(DubboInvoke arg0, DubboInvoke arg1) {
+                return (int) (arg1.getSuccess() - arg0.getSuccess());
+            }
+        });
+        successList.subList(0, successList.size() > 19 ? 19 : successList.size());
+        result.put("success", successList);
+
+        List<DubboInvoke> failureList = Lists.newArrayList();
+        GroupByResults<DubboInvoke> failureResults = mongoTemplate.group(criteris, "dubboInvoke",
+                GroupBy.key("service", "method").initialDocument("{ failure: 0 }")
+                        .reduceFunction("function(doc, prev) { prev.failure += doc.failure }"),
+                DubboInvoke.class);
+        for (DubboInvoke dubboInvoke1 : failureResults) {
+            failureList.add(dubboInvoke1);
+        }
+        Collections.sort(failureList, new Comparator<DubboInvoke>() {
+            public int compare(DubboInvoke arg0, DubboInvoke arg1) {
+                return (int) (arg1.getFailure() - arg0.getFailure());
+            }
+        });
+        failureList.subList(0, failureList.size() > 19 ? 19 : failureList.size());
+        result.put("failure", failureList);
         return result;
     }
 }

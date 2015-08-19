@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Charts Controller
@@ -47,7 +48,7 @@ public class ChartsController {
     @RequestMapping(method = RequestMethod.GET)
     public String index(@ModelAttribute DubboInvoke dubboInvoke, Model model) {
         //获取Service方法
-        List<String> methods = dubboMonitorService.getMethodsByService(dubboInvoke);
+        Set<String> methods = dubboMonitorService.getMethodsByService(dubboInvoke);
         model.addAttribute("service", dubboInvoke.getService());
         model.addAttribute("rows", methods);
         return "service/charts";
@@ -67,7 +68,7 @@ public class ChartsController {
         LineChartSeries artLineChartSeries;
         List<double[]> qpsSeriesDatas;
         List<double[]> artSeriesDatas;
-        List<String> methods = dubboMonitorService.getMethodsByService(dubboInvoke);
+        Set<String> methods = dubboMonitorService.getMethodsByService(dubboInvoke);
         for (String method : methods) {
             qpsLineChart = new DubboInvokeLineChart();
             artLineChart = new DubboInvokeLineChart();

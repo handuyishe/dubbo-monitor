@@ -1,5 +1,6 @@
 package com.handu.open.dubbo.monitor.config;
 
+import com.google.common.collect.Lists;
 import com.mongodb.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,19 +18,18 @@ import static java.util.Collections.singletonList;
 /**
  * MongoDB Config
  *
- * Created by ZhiGuo on 2015/7/14.
+ * Created by ZhiGuo.Chen on 2015/7/14.
  */
 @Configuration
 @ComponentScan
 @EnableMongoRepositories
 public class MongoConfig extends AbstractMongoConfiguration {
 
-    @Autowired
-    private List<Converter<?, ?>> converters;
+    private List<Converter<?, ?>> converters = Lists.newArrayList();
 
     @Override
     protected String getDatabaseName() {
-        return "dubbo-invoke";
+        return "dubbo_invoke";
     }
 
 //    @Override
@@ -42,8 +42,9 @@ public class MongoConfig extends AbstractMongoConfiguration {
     @Override
     @Bean
     public Mongo mongo() throws Exception {
-        return new MongoClient(singletonList(new ServerAddress("127.0.0.1", 27017)),
-                singletonList(MongoCredential.createCredential("name", "db", "pwd".toCharArray())));
+//        return new MongoClient(singletonList(new ServerAddress("172.16.1.85", 27017)),
+//                singletonList(MongoCredential.createCredential("name", "db", "pwd".toCharArray())));
+        return new MongoClient(singletonList(new ServerAddress("172.16.1.85", 27017)));
     }
 
     @Override
