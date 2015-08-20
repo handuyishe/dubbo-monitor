@@ -144,6 +144,12 @@
         <if test="invokeDate != null">
             AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
         </if>
+        <if test="invokeDateFrom != null">
+            AND dubbo_invoke.invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateTo != null">
+            AND dubbo_invoke.invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
+        </if>
         <if test="service != null and service!= '' ">
             AND service = #{service}
         </if>
