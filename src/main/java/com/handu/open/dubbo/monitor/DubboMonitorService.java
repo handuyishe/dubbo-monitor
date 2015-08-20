@@ -29,6 +29,7 @@ import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 import com.handu.open.dubbo.monitor.support.QueryConstructor;
 import com.handu.open.dubbo.monitor.support.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
@@ -54,8 +55,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class DubboMonitorService implements MonitorService {
 
     private static final Logger logger = LoggerFactory.getLogger(DubboMonitorService.class);
-
-    public static final String CLASSNAME = DubboMonitorService.class.getName() + ".";
 
 //    private static final String[] types = {SUCCESS, FAILURE, ELAPSED, CONCURRENT, MAX_ELAPSED, MAX_CONCURRENT};
 
@@ -152,6 +151,7 @@ public class DubboMonitorService implements MonitorService {
                     && dubboInvoke.getConcurrent() == 0 && dubboInvoke.getMaxElapsed() == 0 && dubboInvoke.getMaxConcurrent() == 0) {
                 return;
             }
+            dubboInvoke.setTimeParticle(null);
             mongoTemplate.insert(dubboInvoke);
 
         } catch (Throwable t) {
@@ -182,12 +182,28 @@ public class DubboMonitorService implements MonitorService {
             logger.error("统计查询缺少必要参数！");
             throw new RuntimeException("统计查询缺少必要参数！");
         }
-//        return dao.getList(CLASSNAME, "countDubboInvoke", dubboInvoke);
-        return null;
+
+        TypedAggregation<DubboInvoke> aggregation = Aggregation.newAggregation(DubboInvoke.class,
+                Aggregation.match(Criteria.where("service").is(dubboInvoke.getService())
+                                .and("method").is(dubboInvoke.getMethod())
+                                .and("type").is(dubboInvoke.getType())
+                                .and("invokeDate").gte(dubboInvoke.getInvokeDateFrom()).lte(dubboInvoke.getInvokeDateTo())
+                ),
+                Aggregation.project("service", "method", "type", "success", "failure", "elapsed", "maxElapsed", "maxConcurrent", "invokeTime")
+                        .andExpression("(invokeTime / " + dubboInvoke.getTimeParticle() + ") * " + dubboInvoke.getTimeParticle()).as("invokeTime"),
+                Aggregation.group("service", "method", "type", "invokeTime")
+                        .sum("success").as("success")
+                        .sum("failure").as("failure")
+                        .sum("elapsed").as("elapsed")
+                        .max("maxElapsed").as("maxElapsed")
+                        .min("maxConcurrent").as("maxConcurrent"),
+                Aggregation.sort(Sort.Direction.ASC, "invokeTime")
+        );
+        AggregationResults<DubboInvoke> result = mongoTemplate.aggregate(aggregation, "dubboInvoke", DubboInvoke.class);
+        return result.getMappedResults();
     }
 
     public Set<String> getMethodsByService(DubboInvoke dubboInvoke) {
-//        return dao.getList(CLASSNAME, "getMethodsByService", dubboInvoke);
         Set<String> methods = Sets.newHashSet();
         Query query = QueryConstructor.get()
                 .addIsAttribute("service", dubboInvoke.getService())
@@ -217,21 +233,20 @@ public class DubboMonitorService implements MonitorService {
             throw new RuntimeException("统计查询缺少必要参数！");
         }
         TypedAggregation<DubboInvoke> aggregation = Aggregation.newAggregation(DubboInvoke.class,
+                Aggregation.match(Criteria.where("service").is(dubboInvoke.getService())
+                                .and("method").is(dubboInvoke.getMethod())
+                                .and("type").is(dubboInvoke.getType())
+                                .and("invokeDate").gte(dubboInvoke.getInvokeDateFrom()).lte(dubboInvoke.getInvokeDateTo())
+                ),
                 Aggregation.group("service", "method")
                         .sum("success").as("success")
                         .sum("failure").as("failure")
                         .sum("elapsed").as("elapsed")
                         .max("maxElapsed").as("maxElapsed")
-                        .min("maxConcurrent").as("maxConcurrent"),
-                Aggregation.match(Criteria.where("invokeDate").gte(dubboInvoke.getInvokeDateFrom()).lte(dubboInvoke.getInvokeDateTo())
-                        .and("service").is(dubboInvoke.getService())
-                        .and("method").is(dubboInvoke.getMethod())
-                        .and("type").is(dubboInvoke.getType())
-                )
+                        .min("maxConcurrent").as("maxConcurrent")
         );
-        AggregationResults<DubboInvoke> result = mongoTemplate.aggregate(aggregation, DubboInvoke.class);
-        
-//        return dao.getList(CLASSNAME, "countDubboInvokeInfo", dubboInvoke);
+        AggregationResults<DubboInvoke> result = mongoTemplate.aggregate(aggregation, "dubboInvoke", DubboInvoke.class);
+
         return result.getMappedResults();
     }
 
@@ -244,7 +259,8 @@ public class DubboMonitorService implements MonitorService {
     public Map<String, List> countDubboInvokeTopTen(DubboInvoke dubboInvoke) {
         Map<String, List> result = Maps.newHashMap();
 
-        Criteria criteris = Criteria.where("invokeDate").gte(dubboInvoke.getInvokeDateFrom()).lte(dubboInvoke.getInvokeDateTo());
+        Criteria criteris = Criteria.where("invokeDate").gte(dubboInvoke.getInvokeDateFrom()).lte(dubboInvoke.getInvokeDateTo())
+                .and("type").is(dubboInvoke.getType());
 
         List<DubboInvoke> successList = Lists.newArrayList();
         GroupByResults<DubboInvoke> successResults = mongoTemplate.group(criteris, "dubboInvoke",

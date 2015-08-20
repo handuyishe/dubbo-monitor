@@ -1,5 +1,6 @@
 package com.handu.open.dubbo.monitor.config;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mongodb.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -25,26 +27,30 @@ import static java.util.Collections.singletonList;
 @EnableMongoRepositories
 public class MongoConfig extends AbstractMongoConfiguration {
 
+    @Autowired
+    private Environment env;
+
+    private static final String DB_URL = "db.url";
+
+    private static final String DB_PORT = "db.port";
+
     private List<Converter<?, ?>> converters = Lists.newArrayList();
 
     @Override
     protected String getDatabaseName() {
-        return "dubbo_invoke";
+        return "dubbo_monitor";
     }
 
-//    @Override
-//    public Mongo mongo() throws Exception {
-//        Mongo mongo = new Mongo("127.0.0.1", 27017);
-//        mongo.setWriteConcern(WriteConcern.SAFE);
-//        return mongo;
-//    }
 
     @Override
     @Bean
     public Mongo mongo() throws Exception {
-//        return new MongoClient(singletonList(new ServerAddress("172.16.1.85", 27017)),
+        final String url = Preconditions.checkNotNull(env.getProperty(DB_URL));
+        final int port = Integer.parseInt(env.getProperty(DB_PORT, "27017"));
+        return new MongoClient(singletonList(new ServerAddress(url, port)));
+
+//        return new MongoClient(singletonList(new ServerAddress(url, port)),
 //                singletonList(MongoCredential.createCredential("name", "db", "pwd".toCharArray())));
-        return new MongoClient(singletonList(new ServerAddress("172.16.1.85", 27017)));
     }
 
     @Override

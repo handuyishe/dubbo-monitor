@@ -1,12 +1,12 @@
 /**
  * Copyright 2006-2015 handu.com
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,11 +23,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Statistics Controller
@@ -44,6 +41,19 @@ public class StatisticsController {
 
     @RequestMapping()
     public String index(@ModelAttribute DubboInvoke dubboInvoke, Model model) {
+        // Set default Search Date
+        if (dubboInvoke.getInvokeDateFrom() == null && dubboInvoke.getInvokeDateTo() == null) {
+            Calendar fromDate = new GregorianCalendar();
+            fromDate.set(Calendar.HOUR_OF_DAY, 0);
+            fromDate.set(Calendar.MINUTE, 0);
+            fromDate.set(Calendar.SECOND, 0);
+            dubboInvoke.setInvokeDateFrom(fromDate.getTime());
+            Calendar endDate = new GregorianCalendar();
+            endDate.set(Calendar.HOUR_OF_DAY, 23);
+            endDate.set(Calendar.MINUTE, 59);
+            endDate.set(Calendar.SECOND, 59);
+            dubboInvoke.setInvokeDateTo(endDate.getTime());
+        }
         //获取Service方法
         Set<String> methods = dubboMonitorService.getMethodsByService(dubboInvoke);
         List<DubboInvoke> dubboInvokes;
@@ -61,7 +71,7 @@ public class StatisticsController {
                 }
                 dubboStatistics.setProviderSuccess(di.getSuccess());
                 dubboStatistics.setProviderFailure(di.getFailure());
-                dubboStatistics.setProviderAvgElapsed(di.getElapsed());
+                dubboStatistics.setProviderAvgElapsed(di.getSuccess() != 0 ? di.getElapsed() / di.getSuccess() : 0);
                 dubboStatistics.setProviderMaxElapsed(di.getMaxElapsed());
                 dubboStatistics.setProviderMaxConcurrent(di.getMaxConcurrent());
             }
@@ -73,7 +83,7 @@ public class StatisticsController {
                 }
                 dubboStatistics.setConsumerSuccess(di.getSuccess());
                 dubboStatistics.setConsumerFailure(di.getFailure());
-                dubboStatistics.setConsumerAvgElapsed(di.getElapsed());
+                dubboStatistics.setConsumerAvgElapsed(di.getSuccess() != 0 ? di.getElapsed() / di.getSuccess() : 0);
                 dubboStatistics.setConsumerMaxElapsed(di.getMaxElapsed());
                 dubboStatistics.setConsumerMaxConcurrent(di.getMaxConcurrent());
             }

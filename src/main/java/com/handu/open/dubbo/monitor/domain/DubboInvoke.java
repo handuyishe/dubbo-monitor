@@ -56,13 +56,13 @@ public class DubboInvoke implements Serializable {
 
     private double maxConcurrent;
 
-    private double invokeTime;
+    private long invokeTime;
 
     // ====================查询辅助参数===================
     /**
      * 统计时间粒度(毫秒)
      */
-    private long timeParticle = 60000;
+    private Long timeParticle = 60000L;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date invokeDateFrom;
@@ -206,11 +206,11 @@ public class DubboInvoke implements Serializable {
         this.timeParticle = timeParticle;
     }
 
-    public double getInvokeTime() {
+    public long getInvokeTime() {
         return invokeTime;
     }
 
-    public void setInvokeTime(double invokeTime) {
+    public void setInvokeTime(long invokeTime) {
         this.invokeTime = invokeTime;
     }
 }

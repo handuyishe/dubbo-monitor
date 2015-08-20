@@ -19,7 +19,7 @@ Dubbo Monitor是针对Dubbo开发的监控系统，基于dubbo-monitor-simple改
 ### Dubbo-Monitor配置介绍
 
 `第一步`：创建数据库
-首先创建名称为monitor数据库，编码格式UTF-8。然后将项目sql文件夹下面的create.sql导入到数据库，生成dubbo_invoke表代表成功导入。
+首先搭建MongoDB，创建名称为dubbo_monitor数据库。
 
 `第二步`：编辑项目中application.properties，配置如下：
 
@@ -30,11 +30,9 @@ dubbo.application.owner=handu.com
 dubbo.registry.address=zookeeper://127.0.0.1:2181
 dubbo.protocol.port=6060
 
-####Database Settings
-db.url=jdbc:mysql://<database_host>:<database_port>/monitor?prepStmtCacheSize=517&cachePrepStmts=true&autoReconnect=true&characterEncoding=utf-8
-db.username=root
-db.password=root
-db.maxActive=500
+####MongoDB Settings
+db.url=127.0.0.1
+db.port=27017
 ```
 
 `第三步`：打包运行项目
