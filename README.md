@@ -33,6 +33,10 @@ dubbo.protocol.port=6060
 ####MongoDB Settings
 db.url=127.0.0.1
 db.port=27017
+
+####System Manager
+manager.username=admin
+manager.password=admin
 ```
 
 `第三步`：打包运行项目
