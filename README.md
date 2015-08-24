@@ -35,6 +35,10 @@ db.url=jdbc:mysql://<database_host>:<database_port>/monitor?prepStmtCacheSize=51
 db.username=root
 db.password=root
 db.maxActive=500
+
+####System Manager
+manager.username=admin
+manager.password=admin
 ```
 
 `第三步`：打包运行项目
@@ -42,7 +46,7 @@ db.maxActive=500
 target文件夹下生成的dubbo-monitor.war即为项目部署文件，将其放置到对应服务器目录下，启动服务器即可。例如：tomcat的webapps文件夹下。
 
 `第四步`：访问项目
-启动web服务器后，访问地址：http://IP:[port]/dubbo-moniotor
+启动web服务器后，访问地址：http://IP:[port]/dubbo-moniotor，采用配置文件中manager.username和manager.password设置值进行登录。
 
 ## 服务提供端配置
 
