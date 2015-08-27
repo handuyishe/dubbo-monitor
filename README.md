@@ -10,9 +10,9 @@ Dubbo Monitor是针对Dubbo开发的监控系统，基于dubbo-monitor-simple改
 
 ## 升级日志
 
->### 2015-07-06
+>### 2015-08-25
 >
-> 1. 发布版本1.0.0
+> 1. 发布Dubbo Monitor for Mongo版本1.0.0，版本分支为mongo。
 
 ## Dubbo Monitor使用帮助
 
@@ -44,7 +44,7 @@ manager.password=admin
 target文件夹下生成的dubbo-monitor.war即为项目部署文件，将其放置到对应服务器目录下，启动服务器即可。例如：tomcat的webapps文件夹下。
 
 `第四步`：访问项目
-启动web服务器后，访问地址：http://IP:[port]/dubbo-moniotor
+访问项目 启动web服务器后，访问地址：http://IP:[port]/dubbo-moniotor，采用配置文件中manager.username和manager.password设置值进行登录。
 
 ## 服务提供端配置
 
