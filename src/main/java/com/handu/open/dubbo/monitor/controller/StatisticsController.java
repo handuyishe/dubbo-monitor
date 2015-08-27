@@ -64,7 +64,7 @@ public class StatisticsController {
                 }
                 dubboStatistics.setProviderSuccess(di.getSuccess());
                 dubboStatistics.setProviderFailure(di.getFailure());
-                dubboStatistics.setProviderAvgElapsed(di.getSuccess() != 0 ? di.getElapsed() / di.getSuccess() : 0);
+                dubboStatistics.setProviderAvgElapsed(di.getSuccess() != 0 ? Double.valueOf(String.format("%.4f", di.getElapsed() / di.getSuccess())) : 0);
                 dubboStatistics.setProviderMaxElapsed(di.getMaxElapsed());
                 dubboStatistics.setProviderMaxConcurrent(di.getMaxConcurrent());
             }
@@ -76,7 +76,7 @@ public class StatisticsController {
                 }
                 dubboStatistics.setConsumerSuccess(di.getSuccess());
                 dubboStatistics.setConsumerFailure(di.getFailure());
-                dubboStatistics.setConsumerAvgElapsed(di.getSuccess() != 0 ? di.getElapsed() / di.getSuccess() : 0);
+                dubboStatistics.setConsumerAvgElapsed(di.getSuccess() != 0 ? Double.valueOf(String.format("%.4f", di.getElapsed() / di.getSuccess())) : 0);
                 dubboStatistics.setConsumerMaxElapsed(di.getMaxElapsed());
                 dubboStatistics.setConsumerMaxConcurrent(di.getMaxConcurrent());
             }

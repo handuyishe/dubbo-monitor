@@ -48,13 +48,13 @@ public class DubboInvoke implements Serializable {
 
     private double elapsed;
 
-    private double concurrent;
+    private int concurrent;
 
-    private double maxElapsed;
+    private int maxElapsed;
 
-    private double maxConcurrent;
+    private int maxConcurrent;
 
-    private double invokeTime;
+    private long invokeTime;
 
     // ====================查询辅助参数===================
     /**
@@ -125,7 +125,7 @@ public class DubboInvoke implements Serializable {
         this.id = id;
     }
 
-    public Long getTimeParticle() {
+    public long getTimeParticle() {
         return timeParticle;
     }
 
@@ -174,27 +174,27 @@ public class DubboInvoke implements Serializable {
         this.elapsed = elapsed;
     }
 
-    public double getConcurrent() {
+    public int getConcurrent() {
         return concurrent;
     }
 
-    public void setConcurrent(double concurrent) {
+    public void setConcurrent(int concurrent) {
         this.concurrent = concurrent;
     }
 
-    public double getMaxElapsed() {
+    public int getMaxElapsed() {
         return maxElapsed;
     }
 
-    public void setMaxElapsed(double maxElapsed) {
+    public void setMaxElapsed(int maxElapsed) {
         this.maxElapsed = maxElapsed;
     }
 
-    public double getMaxConcurrent() {
+    public int getMaxConcurrent() {
         return maxConcurrent;
     }
 
-    public void setMaxConcurrent(double maxConcurrent) {
+    public void setMaxConcurrent(int maxConcurrent) {
         this.maxConcurrent = maxConcurrent;
     }
 
@@ -202,11 +202,11 @@ public class DubboInvoke implements Serializable {
         this.timeParticle = timeParticle;
     }
 
-    public double getInvokeTime() {
+    public long getInvokeTime() {
         return invokeTime;
     }
 
-    public void setInvokeTime(double invokeTime) {
+    public void setInvokeTime(long invokeTime) {
         this.invokeTime = invokeTime;
     }
 }
