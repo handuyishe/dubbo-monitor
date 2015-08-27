@@ -9,10 +9,13 @@ Dubbo Monitor是针对Dubbo开发的监控系统，基于dubbo-monitor-simple改
 > PS: 项目目前依赖的是dubbox的2.8.4版本，但是dubbox并没有修改过监控相关的代码，因此理论上也可以支持dubbo的最新版本。
 
 ## 升级日志
+>### 2015-08-25
+>
+> 1. 发布Dubbo Monitor for Mongo版本1.0.0，版本分支为mongo。
 
 >### 2015-07-06
 >
-> 1. 发布版本1.0.0
+> 1. 发布Dubbo Monitor for Relational Database版本1.0.0，版本分支为master。
 
 ## Dubbo Monitor使用帮助
 
