@@ -18,13 +18,13 @@ $(function () {
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }, format: dateFormat
     }).on('apply.daterangepicker', function (ev, picker) {
-        dateFrom.val(new Date(picker.startDate.format(dateFormat) + ' 00:00:00'));
-        dateTo.val(new Date(picker.endDate.format(dateFormat) + ' 23:59:59'));
+        dateFrom.val(new Date(picker.startDate.format(dateFormat).replace(new RegExp("-","gm"),"/") + ' 00:00:00'));
+        dateTo.val(new Date(picker.endDate.format(dateFormat).replace(new RegExp("-","gm"),"/") + ' 23:59:59'));
         //rangeSpan.text(dateFrom.val() + ' ~ ' + dateTo.val());
         $("#statisticsSearchForm").submit();
     });
-    dateFrom.val(new Date(moment().format(dateFormat) + ' 00:00:00'));
-    dateTo.val(new Date(moment().format(dateFormat) + ' 23:59:59'));
+    dateFrom.val(new Date(moment().format(dateFormat).replace(new RegExp("-","gm"),"/") + ' 00:00:00'));
+    dateTo.val(new Date(moment().format(dateFormat).replace(new RegExp("-","gm"),"/") + ' 23:59:59'));
     //rangeSpan.text(dateFrom.val() + ' ~ ' + dateTo.val());
     rangeSpan.text("Choose Count Period");
 });
