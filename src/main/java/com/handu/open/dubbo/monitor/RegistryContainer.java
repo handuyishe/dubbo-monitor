@@ -1,12 +1,12 @@
 /**
  * Copyright 2006-2015 handu.com
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -65,7 +65,7 @@ public class RegistryContainer {
     public Set<String> getApplications() {
         return Collections.unmodifiableSet(applications);
     }
-    
+
     public Set<String> getDependencies(String application, boolean reverse) {
         if (reverse) {
             Set<String> dependencies = new HashSet<String>();
@@ -190,13 +190,13 @@ public class RegistryContainer {
     @PostConstruct
     public void start() {
         URL subscribeUrl = new URL(Constants.ADMIN_PROTOCOL, NetUtils.getLocalHost(), 0, "",
-                                    Constants.INTERFACE_KEY, Constants.ANY_VALUE,
-                                    Constants.GROUP_KEY, Constants.ANY_VALUE,
-                                    Constants.VERSION_KEY, Constants.ANY_VALUE,
-                                    Constants.CLASSIFIER_KEY, Constants.ANY_VALUE,
-                                    Constants.CATEGORY_KEY, Constants.PROVIDERS_CATEGORY + ","
-                                            + Constants.CONSUMERS_CATEGORY,
-                                    Constants.CHECK_KEY, String.valueOf(false));
+                Constants.INTERFACE_KEY, Constants.ANY_VALUE,
+                Constants.GROUP_KEY, Constants.ANY_VALUE,
+                Constants.VERSION_KEY, Constants.ANY_VALUE,
+                Constants.CLASSIFIER_KEY, Constants.ANY_VALUE,
+                Constants.CATEGORY_KEY, Constants.PROVIDERS_CATEGORY + ","
+                + Constants.CONSUMERS_CATEGORY,
+                Constants.CHECK_KEY, String.valueOf(false));
         registry.subscribe(subscribeUrl, new NotifyListener() {
             public void notify(List<URL> urls) {
                 if (urls == null || urls.size() == 0) {
@@ -229,7 +229,7 @@ public class RegistryContainer {
                                     serviceApplications = providerServiceApplications.get(service);
                                 }
                                 serviceApplications.add(application);
-        
+
                                 Set<String> applicationServices = providerApplicationServices.get(application);
                                 if (applicationServices == null) {
                                     providerApplicationServices.put(application, new ConcurrentHashSet<String>());
@@ -255,7 +255,7 @@ public class RegistryContainer {
                                     serviceApplications = consumerServiceApplications.get(service);
                                 }
                                 serviceApplications.add(application);
-        
+
                                 Set<String> applicationServices = consumerApplicationServices.get(application);
                                 if (applicationServices == null) {
                                     consumerApplicationServices.put(application, new ConcurrentHashSet<String>());
@@ -263,7 +263,7 @@ public class RegistryContainer {
                                 }
                                 applicationServices.add(service);
                             }
-                            
+
                         }
                     }
                 }

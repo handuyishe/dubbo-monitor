@@ -1,12 +1,12 @@
 /**
  * Copyright 2006-2015 handu.com
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,13 +34,13 @@ public final class CountUtils {
     private static final Logger logger = LoggerFactory.getLogger(CountUtils.class);
 
     private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
-    
+
     private static final int SUM = 0;
-    
+
     private static final int MAX = 1;
-    
+
     private static final int AVG = 2;
-    
+
     public static long sum(File file) {
         return calc(file, SUM);
     }
@@ -52,7 +52,7 @@ public final class CountUtils {
     public static long avg(File file) {
         return calc(file, SUM);
     }
-    
+
     private static long calc(File file, int op) {
         if (file.exists()) {
             try {
@@ -67,7 +67,7 @@ public final class CountUtils {
                             line = line.substring(i + 1).trim();
                             if (NUMBER_PATTERN.matcher(line).matches()) {
                                 int value = Integer.parseInt(line);
-                                times ++;
+                                times++;
                                 if (op == MAX) {
                                     count = Math.max(count, value);
                                 } else {
@@ -89,5 +89,5 @@ public final class CountUtils {
         }
         return 0;
     }
-    
+
 }

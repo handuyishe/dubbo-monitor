@@ -1,12 +1,12 @@
 /**
  * Copyright 2006-2015 handu.com
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,13 +39,13 @@ public class DubboStatistics implements Serializable {
 
     private double providerAvgElapsed;
 
-    private double consumerMaxElapsed;
+    private int consumerMaxElapsed;
 
-    private double providerMaxElapsed;
+    private int providerMaxElapsed;
 
-    private double consumerMaxConcurrent;
+    private int consumerMaxConcurrent;
 
-    private double providerMaxConcurrent;
+    private int providerMaxConcurrent;
 
     public String getMethod() {
         return method;
@@ -103,35 +103,35 @@ public class DubboStatistics implements Serializable {
         this.providerAvgElapsed = providerAvgElapsed;
     }
 
-    public double getConsumerMaxElapsed() {
+    public int getConsumerMaxElapsed() {
         return consumerMaxElapsed;
     }
 
-    public void setConsumerMaxElapsed(double consumerMaxElapsed) {
+    public void setConsumerMaxElapsed(int consumerMaxElapsed) {
         this.consumerMaxElapsed = consumerMaxElapsed;
     }
 
-    public double getProviderMaxElapsed() {
+    public int getProviderMaxElapsed() {
         return providerMaxElapsed;
     }
 
-    public void setProviderMaxElapsed(double providerMaxElapsed) {
+    public void setProviderMaxElapsed(int providerMaxElapsed) {
         this.providerMaxElapsed = providerMaxElapsed;
     }
 
-    public double getConsumerMaxConcurrent() {
+    public int getConsumerMaxConcurrent() {
         return consumerMaxConcurrent;
     }
 
-    public void setConsumerMaxConcurrent(double consumerMaxConcurrent) {
+    public void setConsumerMaxConcurrent(int consumerMaxConcurrent) {
         this.consumerMaxConcurrent = consumerMaxConcurrent;
     }
 
-    public double getProviderMaxConcurrent() {
+    public int getProviderMaxConcurrent() {
         return providerMaxConcurrent;
     }
 
-    public void setProviderMaxConcurrent(double providerMaxConcurrent) {
+    public void setProviderMaxConcurrent(int providerMaxConcurrent) {
         this.providerMaxConcurrent = providerMaxConcurrent;
     }
 }

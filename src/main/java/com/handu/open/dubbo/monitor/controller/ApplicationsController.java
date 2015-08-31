@@ -1,12 +1,12 @@
 /**
  * Copyright 2006-2015 handu.com
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -126,7 +126,7 @@ public class ApplicationsController {
     private void appendDependency(List<String> rows, boolean reverse, String application, int level, Set<String> appended, Set<String> indirectly) {
         StringBuilder buf = new StringBuilder();
         if (level > 0) {
-            for (int i = 0; i < level; i ++) {
+            for (int i = 0; i < level; i++) {
                 buf.append("<span style=\"margin-left:" + (level * 30) + "px;\"></span>");
             }
             buf.append(reverse ? "<i class=\"fa fa-level-down\" style=\"-webkit-transform: rotate(180deg);margin-right:5px;\"></i> " : "<i class=\"fa fa-level-up\" style=\"-webkit-transform: rotate(90deg);margin-right:5px;\"></i> ");
