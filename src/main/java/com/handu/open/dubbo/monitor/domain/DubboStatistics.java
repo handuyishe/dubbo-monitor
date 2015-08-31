@@ -39,13 +39,13 @@ public class DubboStatistics implements Serializable {
 
     private double providerAvgElapsed;
 
-    private double consumerMaxElapsed;
+    private int consumerMaxElapsed;
 
-    private double providerMaxElapsed;
+    private int providerMaxElapsed;
 
-    private double consumerMaxConcurrent;
+    private int consumerMaxConcurrent;
 
-    private double providerMaxConcurrent;
+    private int providerMaxConcurrent;
 
     public String getMethod() {
         return method;
@@ -103,35 +103,35 @@ public class DubboStatistics implements Serializable {
         this.providerAvgElapsed = providerAvgElapsed;
     }
 
-    public double getConsumerMaxElapsed() {
+    public int getConsumerMaxElapsed() {
         return consumerMaxElapsed;
     }
 
-    public void setConsumerMaxElapsed(double consumerMaxElapsed) {
+    public void setConsumerMaxElapsed(int consumerMaxElapsed) {
         this.consumerMaxElapsed = consumerMaxElapsed;
     }
 
-    public double getProviderMaxElapsed() {
+    public int getProviderMaxElapsed() {
         return providerMaxElapsed;
     }
 
-    public void setProviderMaxElapsed(double providerMaxElapsed) {
+    public void setProviderMaxElapsed(int providerMaxElapsed) {
         this.providerMaxElapsed = providerMaxElapsed;
     }
 
-    public double getConsumerMaxConcurrent() {
+    public int getConsumerMaxConcurrent() {
         return consumerMaxConcurrent;
     }
 
-    public void setConsumerMaxConcurrent(double consumerMaxConcurrent) {
+    public void setConsumerMaxConcurrent(int consumerMaxConcurrent) {
         this.consumerMaxConcurrent = consumerMaxConcurrent;
     }
 
-    public double getProviderMaxConcurrent() {
+    public int getProviderMaxConcurrent() {
         return providerMaxConcurrent;
     }
 
-    public void setProviderMaxConcurrent(double providerMaxConcurrent) {
+    public void setProviderMaxConcurrent(int providerMaxConcurrent) {
         this.providerMaxConcurrent = providerMaxConcurrent;
     }
 }
