@@ -27,6 +27,7 @@
         <druid.version>1.0.14</druid.version>
         <jackson.version>2.3.3</jackson.version>
         <junit.version>4.11</junit.version>
+        <guava.version>16.0.1</guava.version>
     </properties>
 
     <dependencies>
@@ -204,6 +205,11 @@
                     <groupId>com.fasterxml.jackson.core</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
