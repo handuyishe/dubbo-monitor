@@ -47,6 +47,11 @@ public class IndexController {
     private DubboMonitorService dubboMonitorService;
 
     @RequestMapping(method = RequestMethod.GET)
+    public String home() {
+        return "index";
+    }
+
+    @RequestMapping(value = 'index', method = RequestMethod.GET)
     public String index() {
         return "index";
     }
