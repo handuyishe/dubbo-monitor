@@ -34,4 +34,17 @@
 
   ${headContent}
 
+  <script>
+    $(document).ready(function () {
+      var pgurl = window.location.href;
+      console.log(pgurl);
+      // active：ul.sidebar-menu -> li -> a
+      $("ul.sidebar-menu>li>a").each(function () {
+        if ($(this).attr("href") != '#' && pgurl.indexOf($(this).attr("href").split("?")[0]) >= 0) {
+          $(this).parent().addClass("active");
+        }
+      });
+    });
+  </script>
+
 </head>
