@@ -19,6 +19,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -48,8 +49,10 @@ public class MongoConfig extends AbstractMongoConfiguration {
     private Environment env;
 
     private static final String DB_URL = "db.url";
-
     private static final String DB_PORT = "db.port";
+    private static final String DB_USERNAME = "db.username";
+    private static final String DB_DATABASE = "db.database";
+    private static final String DB_PASSWORD = "db.password";
 
     private List<Converter<?, ?>> converters = Lists.newArrayList();
 
@@ -64,10 +67,12 @@ public class MongoConfig extends AbstractMongoConfiguration {
     public Mongo mongo() throws Exception {
         final String url = Preconditions.checkNotNull(env.getProperty(DB_URL));
         final int port = Integer.parseInt(env.getProperty(DB_PORT, "27017"));
-        return new MongoClient(singletonList(new ServerAddress(url, port)));
+        final String username = env.getProperty(DB_USERNAME);
+        final String database = env.getProperty(DB_DATABASE);
+        final String password = env.getProperty(DB_PASSWORD);
 
-//        return new MongoClient(singletonList(new ServerAddress(url, port)),
-//                singletonList(MongoCredential.createCredential("name", "db", "pwd".toCharArray())));
+        return new MongoClient(singletonList(new ServerAddress(url, port)),
+                singletonList(MongoCredential.createCredential(username, database, password.toCharArray())));
     }
 
     @Override
