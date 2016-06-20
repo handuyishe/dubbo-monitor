@@ -196,7 +196,7 @@ public class DubboMonitorService implements MonitorService {
                         .sum("failure").as("failure")
                         .sum("elapsed").as("elapsed")
                         .max("maxElapsed").as("maxElapsed")
-                        .min("maxConcurrent").as("maxConcurrent"),
+                        .max("maxConcurrent").as("maxConcurrent"),
                 Aggregation.sort(Sort.Direction.ASC, "invokeTime")
         );
         AggregationResults<DubboInvoke> result = mongoTemplate.aggregate(aggregation, "dubboInvoke", DubboInvoke.class);
