@@ -105,7 +105,7 @@
             SUM(dubbo_invoke.failure) as failure,
             SUM(dubbo_invoke.elapsed) as elapsed,
             MAX(dubbo_invoke.max_elapsed) as maxElapsed,
-            MIN(dubbo_invoke.max_concurrent) as maxConcurrent
+            MAX(dubbo_invoke.max_concurrent) as maxConcurrent
         FROM dubbo_invoke
         WHERE
             1 = 1
