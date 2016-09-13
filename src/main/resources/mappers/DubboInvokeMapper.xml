@@ -69,9 +69,7 @@
         SUM(dubbo_invoke.elapsed) / SUM(dubbo_invoke.success) as elapsed,
         dubbo_invoke.invoke_time DIV #{timeParticle} * #{timeParticle} as invokeTime
         FROM dubbo_invoke
-
         WHERE 1 = 1
-
         <if test="invokeDate != null">
             AND dubbo_invoke.invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
         </if>
@@ -96,7 +94,7 @@
         <if test="type != null and type!= '' ">
             AND dubbo_invoke.type = #{type}
         </if>
-        GROUP BY dubbo_invoke.invoke_time DIV #{timeParticle}
+        GROUP BY dubbo_invoke.invoke_time DIV #{timeParticle} * #{timeParticle}
     </select>
 
     <select id="countDubboInvokeInfo" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.handu.open</groupId>
-    <artifactId>dubbo-monitor</artifactId>
+    <artifactId>dubbo-monitor-x</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
@@ -295,7 +295,7 @@
     </dependencies>
 
     <build>
-        <finalName>dubbo-monitor</finalName>
+        <finalName>dubbo-monitor-x</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
@@ -304,6 +304,7 @@
                 <configuration>
                     <path>/${project.build.finalName}</path>
                     <uriEncoding>UTF-8</uriEncoding>
+                    <port>8182</port>
                 </configuration>
             </plugin>
         </plugins>
