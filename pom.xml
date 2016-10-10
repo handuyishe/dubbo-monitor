@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.handu.open</groupId>
-    <artifactId>dubbo-monitor-x</artifactId>
+    <artifactId>dubbo-monitor</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
@@ -217,6 +217,11 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>3.2.8.RELEASE</version>
@@ -295,7 +300,7 @@
     </dependencies>
 
     <build>
-        <finalName>dubbo-monitor-x</finalName>
+        <finalName>dubbo-monitor</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
